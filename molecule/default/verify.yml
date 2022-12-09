@@ -1,10 +1,15 @@
 ---
-# This is an example playbook to execute Ansible tests.
-
 - name: Verify
   hosts: all
   gather_facts: false
+  vars:
+    key_name: docker-archive-keyring.gpg
   tasks:
-  - name: Example assertion
+  - name: Gather stats of the downloaded key.
+    ansible.builtin.stat:
+      path: /etc/apt/keyrings/{{ key_name }}
+    register: k
+  - name: Assert that the key was downloaded.
     ansible.builtin.assert:
-      that: true
+      that: k.stat.exists
+      fail_msg: Failed to retrieve '{{ key_name }}' key
