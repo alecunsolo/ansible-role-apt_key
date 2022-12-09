@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Include apt_key.
+      ansible.builtin.include_role:
+        name: alecunsolo.apt_key
