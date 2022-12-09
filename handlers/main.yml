@@ -1,2 +1,6 @@
 ---
-# handlers file for apt_key
+- name: Dearmor key
+  ansible.builtin.command:
+    chdir: /etc/apt/keyrings-armor
+    # --yes option is needed to automatically overwrite already dearmored keys
+    cmd: gpg --out ../keyrings/{{ key_name }} --yes --dearmor {{ key_name }}.asc

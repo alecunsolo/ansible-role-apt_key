@@ -1,0 +1,21 @@
+---
+- name: Check if the distro is supported.
+  ansible.builtin.assert:
+    that: ansible_os_family | lower == "debian"
+    fail_msg: This role supports only debian-like distribution.
+
+- name: Ensure key directories exist.
+  ansible.builtin.file:
+    path: /etc/apt/{{ item }}
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  loop:
+    - keyrings  # Standard directory. May be absent in older releases
+    - keyrings-armor  # Custom directory to keep armored keys
+
+- name: Ensure gpg is installed.
+  ansible.builtin.apt:
+    name: gnupg
+    state: present
